@@ -93,7 +93,9 @@ const About = () => {
 
   const handleDownloadResume = () => {
     const link = document.createElement("a");
-    link.href = "/assets/resume/Sriram-resume-2025.pdf";
+    link.href = `${
+      import.meta.env.BASE_URL
+    }assets/resume/Sriram-resume-2025.pdf`;
     link.download = "Sriram_Resume.pdf";
     document.body.appendChild(link);
     link.click();
