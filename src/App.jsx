@@ -41,7 +41,7 @@ const NavigationTracker = () => {
 function App() {
   return (
     <ThemeProvider>
-      <Router>
+      <Router basename="/portfolio-V2-Alpha">
         <NavigationTracker />
         <div className="min-h-screen bg-[#f7f8fa] dark:bg-black transition-colors duration-300">
           <Navbar />

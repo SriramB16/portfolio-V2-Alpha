@@ -13,6 +13,24 @@ import dechipherLogo from "../assets/AboutPage/decipher-logo.jpg";
 import profilepic from "../assets/AboutPage/sriram-pp-pic.jpg";
 import freelanceLogo from "../assets/logos/SR-logo.jpg";
 
+// logo imports
+
+import bootstrapLogo from "../assets/logos/bootstrap_logo.png";
+import cssLogo from "../assets/logos/CSS_logo.png";
+import expressLogo from "../assets/logos/expressjs_logo.png";
+import figmaLogo from "../assets/logos/figma_logo.png";
+import gitLogo from "../assets/logos/git_logo.png";
+import githubLogo from "../assets/logos/github_logo.png";
+import htmlLogo from "../assets/logos/HTML_logo.png";
+import jsLogo from "../assets/logos/javascript_logo.png";
+import mongoLogo from "../assets/logos/mongodb_logo.png";
+import nodeLogo from "../assets/logos/nodejs_logo.png";
+import postgresLogo from "../assets/logos/postgresql_logo.png";
+import pythonLogo from "../assets/logos/Python_logo.png";
+import reactLogo from "../assets/logos/react_logo.png";
+import sqlLogo from "../assets/logos/sql_logo.png";
+import tailwindLogo from "../assets/logos/tailwind_logo.png";
+
 const About = () => {
   const [hoveredStory, setHoveredStory] = useState(0);
   const [hoveredArrow, setHoveredArrow] = useState(false);
@@ -39,21 +57,22 @@ const About = () => {
 
   // Technologies for marquee - using only uploaded logos
   const technologies = [
-    { name: "React", logo: "/src/assets/logos/react_logo.png" },
-    { name: "JavaScript", logo: "/src/assets/logos/javascript_logo.png" },
-    { name: "Node.js", logo: "/src/assets/logos/nodejs_logo.png" },
-    { name: "Python", logo: "/src/assets/logos/Python_logo.png" },
-    { name: "HTML5", logo: "/src/assets/logos/HTML_logo.png" },
-    { name: "CSS3", logo: "/src/assets/logos/CSS_logo.png" },
-    { name: "Tailwind CSS", logo: "/src/assets/logos/tailwind_logo.png" },
-    { name: "Bootstrap", logo: "/src/assets/logos/bootstrap_logo.png" },
-    { name: "MongoDB", logo: "/src/assets/logos/mongodb_logo.png" },
-    { name: "PostgreSQL", logo: "/src/assets/logos/postgresql_logo.png" },
-    { name: "SQL", logo: "/src/assets/logos/sql_logo.png" },
-    { name: "Git", logo: "/src/assets/logos/git_logo.png" },
-    { name: "GitHub", logo: "/src/assets/logos/github_logo.png" },
-    { name: "Express.js", logo: "/src/assets/logos/expressjs_logo.png" },
-    { name: "Figma", logo: "/src/assets/logos/figma_logo.png" },
+    // Frontend
+    { name: "HTML5", logo: htmlLogo },
+    { name: "CSS3", logo: cssLogo },
+    { name: "JavaScript", logo: jsLogo },
+    { name: "React", logo: reactLogo },
+    { name: "Tailwind CSS", logo: tailwindLogo },
+    { name: "Bootstrap", logo: bootstrapLogo },
+    { name: "Figma", logo: figmaLogo },
+    { name: "Node.js", logo: nodeLogo },
+    { name: "Express.js", logo: expressLogo },
+    { name: "Python", logo: pythonLogo },
+    { name: "MongoDB", logo: mongoLogo },
+    { name: "PostgreSQL", logo: postgresLogo },
+    { name: "SQL", logo: sqlLogo },
+    { name: "Git", logo: gitLogo },
+    { name: "GitHub", logo: githubLogo },
   ];
 
   // Work experience data
