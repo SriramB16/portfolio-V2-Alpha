@@ -1,23 +1,36 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Send, Github, Linkedin, Twitter, Instagram, Mail, ChevronDown, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import ScrollReveal from '../components/ScrollReveal';
-import ShinyText from '../components/ShinyText';
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  AlertCircle,
+  CheckCircle,
+  ChevronDown,
+  Github,
+  Instagram,
+  Linkedin,
+  Loader2,
+  Mail,
+  Send,
+} from "lucide-react";
+import { useState } from "react";
+import ScrollReveal from "../components/ScrollReveal";
+import ShinyText from "../components/ShinyText";
+
+// image imports
+
+import myPic from "../assets/contactPage/pp-pic.jpg";
 
 const Contact = () => {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
   });
 
   const [formStatus, setFormStatus] = useState({
     isSubmitting: false,
     isSuccess: false,
     isError: false,
-    errorMessage: ''
+    errorMessage: "",
   });
 
   const [activeFAQ, setActiveFAQ] = useState(null);
@@ -26,116 +39,176 @@ const Contact = () => {
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
-    
+
     // Clear any previous error states when user starts typing
     if (formStatus.isError) {
-      setFormStatus(prev => ({ ...prev, isError: false, errorMessage: '' }));
+      setFormStatus((prev) => ({ ...prev, isError: false, errorMessage: "" }));
     }
   };
 
   const validateForm = () => {
     const { name, email, subject, message } = formData;
-    
+
     if (!name.trim()) {
-      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Name is required' });
+      setFormStatus({
+        isSubmitting: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "Name is required",
+      });
       return false;
     }
-    
+
     if (!email.trim()) {
-      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Email is required' });
+      setFormStatus({
+        isSubmitting: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "Email is required",
+      });
       return false;
     }
-    
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Please enter a valid email address' });
+      setFormStatus({
+        isSubmitting: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "Please enter a valid email address",
+      });
       return false;
     }
-    
+
     if (!subject.trim()) {
-      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Subject is required' });
+      setFormStatus({
+        isSubmitting: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "Subject is required",
+      });
       return false;
     }
-    
+
     if (!message.trim()) {
-      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Message is required' });
+      setFormStatus({
+        isSubmitting: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "Message is required",
+      });
       return false;
     }
-    
+
     if (message.trim().length < 10) {
-      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Message must be at least 10 characters long' });
+      setFormStatus({
+        isSubmitting: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: "Message must be at least 10 characters long",
+      });
       return false;
     }
-    
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
 
-    setFormStatus({ isSubmitting: true, isSuccess: false, isError: false, errorMessage: '' });
+    setFormStatus({
+      isSubmitting: true,
+      isSuccess: false,
+      isError: false,
+      errorMessage: "",
+    });
 
     try {
       // Check if Supabase environment variables are available
-      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
-        throw new Error('Supabase configuration is missing. Please check your environment variables.');
+      if (
+        !import.meta.env.VITE_SUPABASE_URL ||
+        !import.meta.env.VITE_SUPABASE_ANON_KEY
+      ) {
+        throw new Error(
+          "Supabase configuration is missing. Please check your environment variables."
+        );
       }
 
-      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-email`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
-        },
-        body: JSON.stringify(formData),
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-email`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
 
       const result = await response.json();
 
       if (response.ok) {
-        setFormStatus({ isSubmitting: false, isSuccess: true, isError: false, errorMessage: '' });
+        setFormStatus({
+          isSubmitting: false,
+          isSuccess: true,
+          isError: false,
+          errorMessage: "",
+        });
         // Reset form
-        setFormData({ name: '', email: '', subject: '', message: '' });
-        
+        setFormData({ name: "", email: "", subject: "", message: "" });
+
         // Auto-hide success message after 5 seconds
         setTimeout(() => {
-          setFormStatus(prev => ({ ...prev, isSuccess: false }));
+          setFormStatus((prev) => ({ ...prev, isSuccess: false }));
         }, 5000);
       } else {
         // Handle specific error cases
-        if (result.details && result.details.includes('RESEND_API_KEY')) {
-          throw new Error('Email service is not configured. Please contact the site administrator.');
-        } else if (result.details && result.details.includes('YOUR_EMAIL')) {
-          throw new Error('Email service is not configured. Please contact the site administrator.');
+        if (result.details && result.details.includes("RESEND_API_KEY")) {
+          throw new Error(
+            "Email service is not configured. Please contact the site administrator."
+          );
+        } else if (result.details && result.details.includes("YOUR_EMAIL")) {
+          throw new Error(
+            "Email service is not configured. Please contact the site administrator."
+          );
         } else {
-          throw new Error(result.error || result.details || 'Failed to send message');
+          throw new Error(
+            result.error || result.details || "Failed to send message"
+          );
         }
       }
     } catch (error) {
-      console.error('Error sending message:', error);
-      
-      let errorMessage = 'Failed to send message. Please try again.';
-      
+      console.error("Error sending message:", error);
+
+      let errorMessage = "Failed to send message. Please try again.";
+
       // Provide user-friendly error messages
-      if (error.message.includes('Email service is not configured')) {
-        errorMessage = 'The contact form is temporarily unavailable. Please try contacting me directly via email or social media.';
-      } else if (error.message.includes('Supabase configuration')) {
-        errorMessage = 'The contact form is not properly configured. Please try contacting me directly.';
-      } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
-        errorMessage = 'Network error. Please check your internet connection and try again.';
+      if (error.message.includes("Email service is not configured")) {
+        errorMessage =
+          "The contact form is temporarily unavailable. Please try contacting me directly via email or social media.";
+      } else if (error.message.includes("Supabase configuration")) {
+        errorMessage =
+          "The contact form is not properly configured. Please try contacting me directly.";
+      } else if (
+        error.message.includes("Failed to fetch") ||
+        error.message.includes("NetworkError")
+      ) {
+        errorMessage =
+          "Network error. Please check your internet connection and try again.";
       }
-      
-      setFormStatus({ 
-        isSubmitting: false, 
-        isSuccess: false, 
-        isError: true, 
-        errorMessage: errorMessage
+
+      setFormStatus({
+        isSubmitting: false,
+        isSuccess: false,
+        isError: true,
+        errorMessage: errorMessage,
       });
     }
   };
@@ -147,28 +220,39 @@ const Contact = () => {
   const faqs = [
     {
       question: "What is your current role?",
-      answer: "I'm a full-stack developer with 3+ years of experience, specializing in React, Node.js, and modern web technologies. I work on both frontend and backend development, creating comprehensive digital solutions."
+      answer:
+        "I'm a full-stack developer with 2+ years of experience, specializing in React, Node.js, and modern web technologies. I work on both frontend and backend development, creating comprehensive digital solutions.",
     },
     {
       question: "How much does it cost for a high performing website?",
-      answer: "Project costs vary based on complexity, features, and timeline. A basic website starts from $2,000, while complex web applications can range from $5,000-$15,000+. I provide detailed quotes after understanding your specific requirements."
+      answer:
+        "Project costs depend on the complexity, features, and timeline of your requirements. I offer tailored solutions for everything from simple websites to advanced web applications. You'll receive a detailed quote after we discuss your specific needs and goals.",
     },
     {
       question: "How long will the work take from start to finish?",
-      answer: "Timeline depends on project scope. A simple website takes 2-3 weeks, while complex applications can take 6-12 weeks. I provide realistic timelines during our initial consultation and keep you updated throughout the process."
+      answer:
+        "Timeline depends on project scope. A simple website takes 1-2 weeks, while complex applications can take 8-12 weeks. I provide realistic timelines during our initial consultation and keep you updated throughout the process.",
     },
     {
       question: "Are you available to join as full time?",
-      answer: "I'm currently available for freelance projects and contract work. For full-time opportunities, I'm open to discussing the right fit. Feel free to reach out to discuss your specific needs and we can explore the possibilities."
-    }
+      answer:
+        "I’d be genuinely delighted to join a full-time opportunity that aligns with my skills and passion. That said, I’m also currently available for freelance projects and contract work. Feel free to reach out to discuss your needs — I’d love to explore how we can work together.",
+    },
   ];
 
   const socialLinks = [
-    { name: 'linkedin', icon: Linkedin, href: '#' },
-    { name: 'github', icon: Github, href: '#' },
-    { name: 'instagram', icon: Instagram, href: '#' },
-    { name: 'mail', icon: Mail, href: '#' },
-    { name: 'twitter', icon: Twitter, href: '#' }
+    {
+      name: "linkedin",
+      icon: Linkedin,
+      href: "https://www.linkedin.com/in/sriram-baskaran-894256168",
+    },
+    { name: "github", icon: Github, href: "https://github.com/SriramB16" },
+    {
+      name: "instagram",
+      icon: Instagram,
+      href: "https://www.instagram.com/king_slayer_s_r",
+    },
+    { name: "mail", icon: Mail, href: "mailto:srirambaskaran16@gmail.com" },
   ];
 
   return (
@@ -178,14 +262,17 @@ const Contact = () => {
         <ScrollReveal direction="up" delay={0.1}>
           <div className="text-center mb-12 sm:mb-16">
             <div className="flex items-center justify-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-              <span className="text-green-500 text-xs sm:text-sm font-medium">✦ </span>
+              <span className="text-green-500 text-xs sm:text-sm font-medium">
+                ✦{" "}
+              </span>
               <ShinyText size="xl">GET IN TOUCH</ShinyText>
             </div>
             <h1 className="font-clash text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-normal text-black dark:text-white mb-4 sm:mb-6">
               Let's start a <span className="text-green-500">conversation</span>
             </h1>
             <p className="text-lg sm:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto px-4 font-light">
-              I'd love to hear from you. Whether you have a project in mind or just want to chat about technology.
+              I'd love to hear from you. Whether you have a project in mind or
+              just want to chat about technology.
             </p>
           </div>
         </ScrollReveal>
@@ -198,40 +285,45 @@ const Contact = () => {
                 {/* Glass morphism background layers */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/40 via-blue-50/30 to-purple-50/40 dark:from-gray-800/40 dark:via-blue-900/20 dark:to-purple-900/30 rounded-2xl backdrop-blur-xl"></div>
                 <div className="absolute inset-0 bg-white/20 dark:bg-gray-900/20 rounded-2xl backdrop-blur-sm"></div>
-                
+
                 {/* Content */}
                 <div className="relative bg-white/60 dark:bg-gray-900/60 backdrop-blur-xl rounded-2xl p-6 sm:p-8 shadow-2xl shadow-black/10 dark:shadow-black/30 border border-white/30 dark:border-gray-700/30 hover:shadow-3xl hover:shadow-black/15 dark:hover:shadow-black/40 transition-all duration-500 hover:-translate-y-1">
                   {/* Available for work status */}
                   <div className="flex items-center gap-2 mb-6">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-green-500 text-sm font-normal">Available for work</span>
+                    <span className="text-green-500 text-sm font-normal">
+                      Available for work
+                    </span>
                   </div>
 
                   {/* Profile Photo */}
                   <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-gray-200/80 to-gray-300/80 dark:from-gray-700/80 dark:to-gray-800/80 backdrop-blur-sm mb-6 flex items-center justify-center overflow-hidden border border-white/30 dark:border-gray-600/30">
-                    <span className="text-2xl sm:text-3xl">👨‍💻</span>
+                    {/* <span className="text-2xl sm:text-3xl">👨‍💻</span> */}
+                    <img src={myPic} alt="sriram pic" />
                   </div>
 
                   {/* Description */}
                   <p className="text-gray-700 dark:text-gray-300 leading-relaxed mb-6 text-sm sm:text-base font-normal">
-                    My inbox is always open. Whether you have a project or just want to say Hi, I would love to hear from you. Feel free to contact me and I'll get back to you.
+                    My inbox is always open. Whether you have a project or just
+                    want to say Hi, I would love to hear from you. Feel free to
+                    contact me and I'll get back to you.
                   </p>
 
                   {/* Social Links */}
-                  <div 
+                  <div
                     className="flex gap-4"
                     onMouseLeave={() => setHoveredSocial(null)}
                   >
                     {socialLinks.map((social) => {
                       const IconComponent = social.icon;
                       return (
-                        <a 
+                        <a
                           key={social.name}
-                          href={social.href} 
+                          href={social.href}
                           className={`w-10 h-10 rounded-full border border-white/40 dark:border-gray-600/40 bg-white/40 dark:bg-gray-800/40 backdrop-blur-sm flex items-center justify-center transition-all duration-300 hover:border-green-500 hover:text-green-500 hover:bg-green-50/50 dark:hover:bg-green-900/20 hover:backdrop-blur-md ${
                             hoveredSocial && hoveredSocial !== social.name
-                              ? 'text-gray-400 dark:text-gray-600 opacity-40'
-                              : 'text-gray-600 dark:text-gray-400'
+                              ? "text-gray-400 dark:text-gray-600 opacity-40"
+                              : "text-gray-600 dark:text-gray-400"
                           }`}
                           onMouseEnter={() => setHoveredSocial(social.name)}
                         >
@@ -251,14 +343,16 @@ const Contact = () => {
               {/* Multiple glass morphism background layers for depth */}
               <div className="absolute inset-0 bg-gradient-to-br from-blue-100/50 via-purple-100/40 to-pink-100/50 dark:from-blue-900/30 dark:via-purple-900/25 dark:to-pink-900/30 rounded-2xl backdrop-blur-2xl"></div>
               <div className="absolute inset-0 bg-gradient-to-tl from-white/30 via-transparent to-white/20 dark:from-gray-800/30 dark:via-transparent dark:to-gray-700/20 rounded-2xl backdrop-blur-xl"></div>
-              
+
               {/* Form container with glass effect */}
               <div className="relative bg-white/50 dark:bg-gray-900/50 backdrop-blur-2xl rounded-2xl p-6 sm:p-8 shadow-2xl shadow-black/10 dark:shadow-black/30 hover:shadow-3xl hover:shadow-black/15 dark:hover:shadow-black/40 transition-all duration-500 hover:-translate-y-1 border border-white/40 dark:border-gray-700/40">
                 <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
-                  <span className="text-green-500 text-xs sm:text-sm font-medium">✦ </span>
+                  <span className="text-green-500 text-xs sm:text-sm font-medium">
+                    ✦{" "}
+                  </span>
                   <ShinyText size="lg">SEND A MESSAGE</ShinyText>
                 </div>
-                
+
                 {/* Status Messages */}
                 <AnimatePresence>
                   {formStatus.isSuccess && (
@@ -268,14 +362,21 @@ const Contact = () => {
                       exit={{ opacity: 0, y: -10 }}
                       className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3"
                     >
-                      <CheckCircle size={20} className="text-green-600 dark:text-green-400 flex-shrink-0" />
+                      <CheckCircle
+                        size={20}
+                        className="text-green-600 dark:text-green-400 flex-shrink-0"
+                      />
                       <div>
-                        <p className="text-green-800 dark:text-green-200 font-medium text-sm">Message sent successfully!</p>
-                        <p className="text-green-700 dark:text-green-300 text-xs mt-1">I'll get back to you within 24-48 hours.</p>
+                        <p className="text-green-800 dark:text-green-200 font-medium text-sm">
+                          Message sent successfully!
+                        </p>
+                        <p className="text-green-700 dark:text-green-300 text-xs mt-1">
+                          I'll get back to you within 24-48 hours.
+                        </p>
                       </div>
                     </motion.div>
                   )}
-                  
+
                   {formStatus.isError && (
                     <motion.div
                       initial={{ opacity: 0, y: -10 }}
@@ -283,16 +384,27 @@ const Contact = () => {
                       exit={{ opacity: 0, y: -10 }}
                       className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3"
                     >
-                      <AlertCircle size={20} className="text-red-600 dark:text-red-400 flex-shrink-0" />
-                      <p className="text-red-800 dark:text-red-200 text-sm">{formStatus.errorMessage}</p>
+                      <AlertCircle
+                        size={20}
+                        className="text-red-600 dark:text-red-400 flex-shrink-0"
+                      />
+                      <p className="text-red-800 dark:text-red-200 text-sm">
+                        {formStatus.errorMessage}
+                      </p>
                     </motion.div>
                   )}
                 </AnimatePresence>
-                
-                <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+
+                <form
+                  onSubmit={handleSubmit}
+                  className="space-y-4 sm:space-y-6"
+                >
                   <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2">
+                      <label
+                        htmlFor="name"
+                        className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2"
+                      >
                         Name *
                       </label>
                       <input
@@ -307,9 +419,12 @@ const Contact = () => {
                         required
                       />
                     </div>
-                    
+
                     <div>
-                      <label htmlFor="email" className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2">
+                      <label
+                        htmlFor="email"
+                        className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2"
+                      >
                         Email *
                       </label>
                       <input
@@ -327,7 +442,10 @@ const Contact = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="subject" className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2">
+                    <label
+                      htmlFor="subject"
+                      className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2"
+                    >
                       Subject *
                     </label>
                     <input
@@ -344,7 +462,10 @@ const Contact = () => {
                   </div>
 
                   <div>
-                    <label htmlFor="message" className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2">
+                    <label
+                      htmlFor="message"
+                      className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2"
+                    >
                       Message *
                     </label>
                     <textarea
@@ -367,7 +488,10 @@ const Contact = () => {
                   >
                     {formStatus.isSubmitting ? (
                       <>
-                        <Loader2 size={18} className="sm:w-5 sm:h-5 animate-spin" />
+                        <Loader2
+                          size={18}
+                          className="sm:w-5 sm:h-5 animate-spin"
+                        />
                         <span>Sending...</span>
                       </>
                     ) : (
@@ -375,7 +499,10 @@ const Contact = () => {
                         <span className="relative z-10 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black">
                           Send Message
                         </span>
-                        <Send size={18} className="sm:w-5 sm:h-5 relative z-10 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black" />
+                        <Send
+                          size={18}
+                          className="sm:w-5 sm:h-5 relative z-10 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black"
+                        />
                         <div className="absolute inset-0 bg-gray-800 dark:bg-gray-200 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                       </>
                     )}
@@ -393,11 +520,15 @@ const Contact = () => {
             <ScrollReveal direction="left" delay={0.1}>
               <div>
                 <div className="flex items-center gap-2 sm:gap-3 mb-6 sm:mb-8">
-                  <span className="text-green-500 text-xs sm:text-sm font-medium">✦ </span>
+                  <span className="text-green-500 text-xs sm:text-sm font-medium">
+                    ✦{" "}
+                  </span>
                   <ShinyText size="lg">FAQS</ShinyText>
                 </div>
                 <h2 className="font-clash text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-light text-black dark:text-white">
-                  Have<br />Questions?
+                  Have
+                  <br />
+                  Questions?
                 </h2>
               </div>
             </ScrollReveal>
@@ -405,35 +536,39 @@ const Contact = () => {
             {/* Right Side - FAQ Accordion (2/3 width) with Glass Morphism */}
             <div className="lg:col-span-2 space-y-2">
               {faqs.map((faq, index) => (
-                <ScrollReveal key={index} direction="right" delay={0.2 + index * 0.1}>
+                <ScrollReveal
+                  key={index}
+                  direction="right"
+                  delay={0.2 + index * 0.1}
+                >
                   <div className="relative">
                     {/* Glass morphism background */}
                     <div className="absolute inset-0 bg-gradient-to-r from-white/30 via-blue-50/20 to-purple-50/30 dark:from-gray-800/30 dark:via-blue-900/15 dark:to-purple-900/20 rounded-xl backdrop-blur-xl"></div>
-                    
+
                     <div className="relative bg-white/50 dark:bg-gray-900/50 backdrop-blur-xl rounded-xl shadow-xl shadow-black/5 dark:shadow-black/20 hover:shadow-2xl hover:shadow-black/10 dark:hover:shadow-black/30 transition-all duration-300 overflow-hidden border border-white/30 dark:border-gray-700/30">
                       <button
                         onClick={() => toggleFAQ(index)}
                         className="w-full p-4 sm:p-5 flex items-center justify-between text-left hover:bg-white/30 dark:hover:bg-gray-800/30 backdrop-blur-sm transition-all duration-300"
                       >
                         <span className="font-normal text-gray-800 dark:text-gray-200 text-sm sm:text-base pr-4">
-                          {String(index + 1).padStart(2, '0')}. {faq.question}
+                          {String(index + 1).padStart(2, "0")}. {faq.question}
                         </span>
                         <motion.div
                           animate={{ rotate: activeFAQ === index ? 180 : 0 }}
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                         >
-                          <ChevronDown 
-                            size={16} 
-                            className="sm:w-[18px] sm:h-[18px] text-gray-500 dark:text-gray-400" 
+                          <ChevronDown
+                            size={16}
+                            className="sm:w-[18px] sm:h-[18px] text-gray-500 dark:text-gray-400"
                           />
                         </motion.div>
                       </button>
-                      
+
                       <AnimatePresence>
                         {activeFAQ === index && (
                           <motion.div
                             initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
+                            animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.3, ease: "easeInOut" }}
                             className="overflow-hidden"

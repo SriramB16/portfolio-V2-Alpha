@@ -9,24 +9,58 @@ const Navbar = () => {
   const { darkMode, toggleDarkMode } = useTheme();
   const location = useLocation();
 
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const scrollThreshold = window.innerHeight * 0.4;
+  //     const currentScroll = window.scrollY;
+
+  //     let width;
+  //     if (currentScroll <= scrollThreshold) {
+  //       width = 95 - (currentScroll / scrollThreshold) * (95 - 55);
+  //     } else {
+  //       width = 55;
+  //     }
+
+  //     setScrollWidth(width);
+  //   };
+
+  //   window.addEventListener("scroll", handleScroll);
+  //   return () => {
+  //     window.removeEventListener("scroll", handleScroll);
+  //   };
+  // }, []);
+
   useEffect(() => {
     const handleScroll = () => {
       const scrollThreshold = window.innerHeight * 0.4;
       const currentScroll = window.scrollY;
 
+      // Set min width based on screen size
+      let minWidth;
+      if (window.innerWidth >= 1024) {
+        // lg breakpoint in Tailwind (1024px)
+        minWidth = 55;
+      } else {
+        minWidth = 75;
+      }
+
       let width;
       if (currentScroll <= scrollThreshold) {
-        width = 95 - (currentScroll / scrollThreshold) * (95 - 55);
+        width = 95 - (currentScroll / scrollThreshold) * (95 - minWidth);
       } else {
-        width = 55;
+        width = minWidth;
       }
 
       setScrollWidth(width);
     };
 
     window.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll); // Update on resize too
+    handleScroll(); // Set initial width
+
     return () => {
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, []);
 
@@ -200,11 +234,11 @@ const Navbar = () => {
           className="
             flex items-center justify-between 
             rounded-full bg-white/90 dark:bg-black/90
-            backdrop-blur-sm transition-all duration-300 ease-out
-            shadow-sm dark:shadow-gray-800/20 py-2 sm:py-3
+            backdrop-blur-xs transition-all duration-300 ease-out
+            shadow-sm dark:shadow-gray-800/20 py-1 sm:py-2
           "
         >
-          <div className="flex-1 flex justify-start pl-4 sm:pl-6 min-w-0">
+          <div className="flex-1 flex justify-start pl-2 sm:pl-3 min-w-0">
             <Logo />
           </div>
 
@@ -243,7 +277,7 @@ const Navbar = () => {
             </div>
           </div>
 
-          <div className="flex-1 flex justify-end pr-4 sm:pr-6 min-w-0">
+          <div className="flex-1 flex justify-end pr-2 sm:pr-3 min-w-0">
             <button
               onClick={toggleDarkMode}
               aria-label="Toggle dark mode"

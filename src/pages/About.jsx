@@ -6,6 +6,13 @@ import DesignProcessCarousel from "../components/DesignProcessCarousel";
 import ScrollReveal from "../components/ScrollReveal";
 import ShinyText from "../components/ShinyText";
 
+// image imports
+
+import storyvid from "../assets/AboutPage/aboutStory.mp4";
+import dechipherLogo from "../assets/AboutPage/decipher-logo.jpg";
+import profilepic from "../assets/AboutPage/sriram-pp-pic.jpg";
+import freelanceLogo from "../assets/logos/SR-logo.jpg";
+
 const About = () => {
   const [hoveredStory, setHoveredStory] = useState(0);
   const [hoveredArrow, setHoveredArrow] = useState(false);
@@ -15,18 +22,18 @@ const About = () => {
   const storyData = [
     {
       text: " Once destined for a white coat, I took a detour from Biomedical Engineering into the world of code. While my peers studied anatomy, I was secretly obsessed with building interfaces. NEET didn’t work out—but tech did.",
-      image:
-        "https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=800",
+      // image:
+      //   "https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
     {
       text: "After college, I spent a year in healthcare revenue management, but something was missing. I swapped Excel sheets for HTML tags and convinced my parents to let me pursue what I truly loved. That’s when the real journey began.",
-      image:
-        "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800",
+      // image:
+      // "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
     {
       text: "Today, I'm a front-end developer crafting smooth, stunning user experiences. From freelancing to building brands, I code with purpose and precision. Bonus: I can center a <div> in my sleep.",
-      image:
-        "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800",
+      // image:
+      //   "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=800",
     },
   ];
 
@@ -52,39 +59,20 @@ const About = () => {
   // Work experience data
   const workExperience = [
     {
-      company: "OneShield Software",
-      logo: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=100",
-      position: "Software Engineer",
-      duration: "Aug 2022 — Present",
+      company: "Freelancer",
+      logo: freelanceLogo,
+      position: "Full Stack developer",
+      duration: "Aug 2023 - Present",
     },
     {
-      company: "Design and Code",
-      logo: "https://images.pexels.com/photos/196644/pexels-photo-196644.jpeg?auto=compress&cs=tinysrgb&w=100",
-      position: "Founder",
-      duration: "Jan 2021 — Present",
-    },
-    {
-      company: "BlackboxAI",
-      logo: "https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=100",
-      position: "Design Engineer",
-      duration: "Feb 2025 — Mar 2025",
-    },
-    {
-      company: "Social3",
-      logo: "https://images.pexels.com/photos/1118873/pexels-photo-1118873.jpeg?auto=compress&cs=tinysrgb&w=100",
-      position: "UI/UX Designer",
-      duration: "Aug 2022 — Sep 2023",
-    },
-    {
-      company: "TechCorp",
-      logo: "https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=100",
-      position: "Frontend Developer",
-      duration: "Jan 2022 — Jul 2022",
+      company: "Decipher Health records LLP",
+      logo: dechipherLogo,
+      position: "RCM Executive",
+      duration: "Aug 2021 — Jan 2023",
     },
   ];
 
   const handleDownloadResume = () => {
-    // This will be updated when you upload your resume
     const link = document.createElement("a");
     link.href = "/assets/resume/Sriram-resume-2025.pdf";
     link.download = "Sriram_Resume.pdf";
@@ -112,7 +100,7 @@ const About = () => {
                   {/* Main Circular Photo */}
                   <div className="w-64 h-64 sm:w-80 sm:h-80 md:w-96 md:h-96 lg:w-80 lg:h-80 xl:w-96 xl:h-96 rounded-full overflow-hidden shadow-2xl shadow-black/20 dark:shadow-black/40">
                     <img
-                      src="https://images.pexels.com/photos/2379004/pexels-photo-2379004.jpeg?auto=compress&cs=tinysrgb&w=800"
+                      src={profilepic}
                       alt="Sriram"
                       className="w-full h-full object-cover"
                     />
@@ -176,9 +164,8 @@ const About = () => {
             <div className="lg:col-span-2 text-center lg:text-left lg:pl-8 xl:pl-12">
               <ScrollReveal direction="right" delay={0.2}>
                 <h1 className="font-clash text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-tight mb-6 sm:mb-8">
-                  A <span className="text-green-500">creative</span>
-                  <br />
-                  <span className="text-green-500">developer</span> &<br />
+                  A <span className="text-green-500">creative developer </span>
+                  &<br />
                   digital designer
                 </h1>
               </ScrollReveal>
@@ -227,7 +214,7 @@ const About = () => {
             {/* Left - Dynamic Image */}
             <ScrollReveal direction="left" delay={0.2}>
               <div className="relative bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-2xl sm:rounded-3xl overflow-hidden shadow-xl shadow-black/15 dark:shadow-black/30 aspect-[4/3]">
-                <motion.img
+                {/* <motion.img
                   key={hoveredStory}
                   src={storyData[hoveredStory]?.image}
                   alt="Story illustration"
@@ -235,6 +222,15 @@ const About = () => {
                   initial={{ opacity: 0, scale: 1.05 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.4, ease: "easeInOut" }}
+                /> */}
+                <motion.video
+                  src={storyvid}
+                  alt="Story illustration"
+                  className="w-full h-full object-cover"
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
               </div>
@@ -256,7 +252,7 @@ const About = () => {
                     delay={0.4 + index * 0.1}
                   >
                     <p
-                      className={`text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base cursor-pointer transition-all duration-300 p-4 rounded-xl ${
+                      className={`text-gray-600 dark:text-gray-400 leading-relaxed text-sm sm:text-base cursor-pointer transition-all duration-300 p-2 rounded-xl ${
                         hoveredStory === index
                           ? "bg-green-50 dark:bg-green-900/20 text-black dark:text-white"
                           : "hover:bg-gray-50 dark:hover:bg-gray-800/50"

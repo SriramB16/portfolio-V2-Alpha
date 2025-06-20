@@ -539,7 +539,7 @@ const Home = () => {
                   </ScrollReveal>
 
                   <ScrollReveal direction="up" delay={0.3}>
-                    <Link
+                    {/* <Link
                       to="/contact"
                       className="group relative inline-block border border-black dark:border-white text-black dark:text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium overflow-hidden transition-all duration-300 text-sm sm:text-base hover:shadow-lg hover:shadow-black/20 dark:hover:shadow-black/40"
                       onClick={() =>
@@ -550,6 +550,28 @@ const Home = () => {
                         Contact Me
                       </span>
                       <div className="absolute inset-0 bg-black dark:bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                    </Link> */}
+
+                    <Link
+                      to="/contact"
+                      className="group relative inline-block border border-black dark:border-white text-black dark:text-white bg-transparent px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium overflow-hidden transition-all duration-300 text-sm sm:text-base hover:shadow-lg hover:shadow-black/20 dark:hover:shadow-black/40"
+                      onClick={() =>
+                        sessionStorage.setItem("internalNavigation", "true")
+                      }
+                    >
+                      {/* Text for normal state (black in light, white in dark) */}
+                      <span className="relative z-10 transition-opacity duration-300 group-hover:opacity-0 dark:group-hover:opacity-0">
+                        Contact Me
+                      </span>
+                      {/* Text for hover state (white in light, black in dark) */}
+                      <span
+                        className="absolute inset-0 flex items-center justify-center font-medium transition-opacity duration-300 opacity-0 group-hover:opacity-100 dark:group-hover:opacity-100 z-10
+    group-hover:text-white dark:group-hover:text-black"
+                      >
+                        Contact Me
+                      </span>
+                      {/* Animated background: black in light, white in dark */}
+                      <div className="absolute inset-0 bg-black dark:bg-white pointer-events-none transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
                     </Link>
                   </ScrollReveal>
                 </div>
