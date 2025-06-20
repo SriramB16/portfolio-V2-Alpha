@@ -31,6 +31,10 @@ import reactLogo from "../assets/logos/react_logo.png";
 import sqlLogo from "../assets/logos/sql_logo.png";
 import tailwindLogo from "../assets/logos/tailwind_logo.png";
 
+// resume import
+
+import resumeFile from "../assets/resume/Sriram-resume-2025.pdf";
+
 const About = () => {
   const [hoveredStory, setHoveredStory] = useState(0);
   const [hoveredArrow, setHoveredArrow] = useState(false);
@@ -93,9 +97,7 @@ const About = () => {
 
   const handleDownloadResume = () => {
     const link = document.createElement("a");
-    link.href = `${
-      import.meta.env.BASE_URL
-    }assets/resume/Sriram-resume-2025.pdf`;
+    link.href = resumeFile;
     link.download = "Sriram_Resume.pdf";
     document.body.appendChild(link);
     link.click();
