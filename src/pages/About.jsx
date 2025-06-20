@@ -33,7 +33,7 @@ import tailwindLogo from "../assets/logos/tailwind_logo.png";
 
 // resume import
 
-import resumeFile from "../assets/resume/Sriram-resume-2025.pdf";
+// import resumeFile from "../assets/resume/Sriram-resume-2025.pdf";
 
 const About = () => {
   const [hoveredStory, setHoveredStory] = useState(0);
@@ -95,9 +95,20 @@ const About = () => {
     },
   ];
 
+  // const handleDownloadResume = () => {
+  //   const link = document.createElement("a");
+  //   link.href = resumeFile;
+  //   link.download = "Sriram_Resume.pdf";
+  //   document.body.appendChild(link);
+  //   link.click();
+  //   document.body.removeChild(link);
+  // };
+
   const handleDownloadResume = () => {
     const link = document.createElement("a");
-    link.href = resumeFile;
+    link.href = `${
+      import.meta.env.BASE_URL
+    }assets/resume/Sriram-resume-2025.pdf`;
     link.download = "Sriram_Resume.pdf";
     document.body.appendChild(link);
     link.click();
