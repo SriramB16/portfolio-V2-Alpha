@@ -1,16 +1,24 @@
-import React, { useState } from 'react';
-import { Github, Linkedin, Instagram, Mail, Twitter } from 'lucide-react';
-import ScrollReveal from './ScrollReveal';
+import { Github, Instagram, Linkedin, Mail } from "lucide-react";
+import { useState } from "react";
+import ScrollReveal from "./ScrollReveal";
 
 const Footer = () => {
   const [hoveredIcon, setHoveredIcon] = useState(null);
 
   const socialLinks = [
-    { name: 'linkedin', icon: Linkedin, href: '#' },
-    { name: 'github', icon: Github, href: '#' },
-    { name: 'instagram', icon: Instagram, href: '#' },
-    { name: 'mail', icon: Mail, href: '#' },
-    { name: 'twitter', icon: Twitter, href: '#' }
+    {
+      name: "linkedin",
+      icon: Linkedin,
+      href: "https://www.linkedin.com/in/sriram-baskaran-894256168",
+    },
+    { name: "github", icon: Github, href: "https://github.com/SriramB16" },
+    {
+      name: "instagram",
+      icon: Instagram,
+      href: "https://www.instagram.com/king_slayer_s_r",
+    },
+    { name: "mail", icon: Mail, href: "mailto:srirambaskaran16@gmail.com" },
+    // { name: 'X', icon: Twitter, href: '#' }
   ];
 
   return (
@@ -22,20 +30,26 @@ const Footer = () => {
           </p>
         </ScrollReveal>
 
-        <div 
+        <div
           className="flex gap-4 sm:gap-6"
           onMouseLeave={() => setHoveredIcon(null)}
         >
           {socialLinks.map((social, index) => {
             const IconComponent = social.icon;
             return (
-              <ScrollReveal key={social.name} direction="up" delay={0.2 + index * 0.1}>
-                <a 
-                  href={social.href} 
+              <ScrollReveal
+                key={social.name}
+                direction="up"
+                delay={0.2 + index * 0.1}
+              >
+                <a
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className={`transition-all duration-300 ${
                     hoveredIcon && hoveredIcon !== social.name
-                      ? 'text-gray-400 dark:text-gray-600 opacity-40'
-                      : 'text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white'
+                      ? "text-gray-400 dark:text-gray-600 opacity-40"
+                      : "text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white"
                   }`}
                   onMouseEnter={() => setHoveredIcon(social.name)}
                 >

@@ -1,14 +1,19 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import { ThemeProvider } from './context/ThemeContext';
-import Navbar from './components/Navbar';
-import PageTransition from './components/PageTransition';
-import Footer from './components/Footer';
-import Home from './pages/Home';
-import About from './pages/About';
-import Projects from './pages/Projects';
-import ProjectDetail from './pages/ProjectDetail';
-import Contact from './pages/Contact';
+import { useEffect } from "react";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+} from "react-router-dom";
+import Footer from "./components/Footer";
+import Navbar from "./components/Navbar";
+import PageTransition from "./components/PageTransition";
+import { ThemeProvider } from "./context/ThemeContext";
+import About from "./pages/About";
+import Contact from "./pages/Contact";
+import Home from "./pages/Home";
+import ProjectDetail from "./pages/ProjectDetail";
+import Projects from "./pages/Projects";
 
 // Component to handle navigation tracking and scroll restoration
 const NavigationTracker = () => {
@@ -18,9 +23,8 @@ const NavigationTracker = () => {
     // Mark that we're doing internal navigation when changing routes
     // This helps distinguish between page loads and internal navigation
     const handleRouteChange = () => {
-      if (location.pathname !== '/') {
-        sessionStorage.setItem('internalNavigation', 'true');
-      }
+      // Mark internal navigation for any route change
+      sessionStorage.setItem("internalNavigation", "true");
     };
 
     handleRouteChange();
@@ -42,31 +46,46 @@ function App() {
         <div className="min-h-screen bg-[#f7f8fa] dark:bg-black transition-colors duration-300">
           <Navbar />
           <Routes>
-            <Route path="/" element={
-              <PageTransition>
-                <Home />
-              </PageTransition>
-            } />
-            <Route path="/about" element={
-              <PageTransition>
-                <About />
-              </PageTransition>
-            } />
-            <Route path="/projects" element={
-              <PageTransition>
-                <Projects />
-              </PageTransition>
-            } />
-            <Route path="/projects/:id" element={
-              <PageTransition>
-                <ProjectDetail />
-              </PageTransition>
-            } />
-            <Route path="/contact" element={
-              <PageTransition>
-                <Contact />
-              </PageTransition>
-            } />
+            <Route
+              path="/"
+              element={
+                <PageTransition>
+                  <Home />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/about"
+              element={
+                <PageTransition>
+                  <About />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <PageTransition>
+                  <Projects />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/projects/:id"
+              element={
+                <PageTransition>
+                  <ProjectDetail />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/contact"
+              element={
+                <PageTransition>
+                  <Contact />
+                </PageTransition>
+              }
+            />
           </Routes>
           <Footer />
         </div>
