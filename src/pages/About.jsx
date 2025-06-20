@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { ArrowUpRight, Download } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import BlurText from "../components/blurFadeText";
 import DesignProcessCarousel from "../components/DesignProcessCarousel";
 import ScrollReveal from "../components/ScrollReveal";
 import ShinyText from "../components/ShinyText";
@@ -196,11 +197,28 @@ const About = () => {
 
             {/* Right - Text Content (2/3 width) - Moved more to the right */}
             <div className="lg:col-span-2 text-center lg:text-left lg:pl-8 xl:pl-12">
-              <ScrollReveal direction="right" delay={0.2}>
+              {/* <ScrollReveal direction="right" delay={0.2}>
                 <h1 className="font-clash text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-tight mb-6 sm:mb-8">
                   A <span className="text-green-500">creative developer </span>
                   &<br />
                   digital designer
+                </h1>
+              </ScrollReveal> */}
+              <ScrollReveal direction="right" delay={0.2}>
+                <h1 className="font-clash text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-tight mb-6 sm:mb-8">
+                  <span className="text-black dark:text-white">A </span>
+                  <span className="text-green-500 inline-block">
+                    <BlurText
+                      text="creative developer"
+                      animateBy="letter"
+                      direction="bottom"
+                      delay={100}
+                    />
+                  </span>{" "}
+                  <span className="text-black dark:text-white">
+                    &<br />
+                    digital designer
+                  </span>
                 </h1>
               </ScrollReveal>
 
