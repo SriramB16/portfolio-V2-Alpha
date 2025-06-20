@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Send, Github, Linkedin, Twitter, Instagram, Mail, ChevronDown } from 'lucide-react';
+import { Send, Github, Linkedin, Twitter, Instagram, Mail, ChevronDown, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import ScrollReveal from '../components/ScrollReveal';
 import ShinyText from '../components/ShinyText';
@@ -13,6 +13,13 @@ const Contact = () => {
     message: ''
   });
 
+  const [formStatus, setFormStatus] = useState({
+    isSubmitting: false,
+    isSuccess: false,
+    isError: false,
+    errorMessage: ''
+  });
+
   const [activeFAQ, setActiveFAQ] = useState(null);
   const [hoveredSocial, setHoveredSocial] = useState(null);
 
@@ -21,12 +28,116 @@ const Contact = () => {
       ...formData,
       [e.target.name]: e.target.value
     });
+    
+    // Clear any previous error states when user starts typing
+    if (formStatus.isError) {
+      setFormStatus(prev => ({ ...prev, isError: false, errorMessage: '' }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const validateForm = () => {
+    const { name, email, subject, message } = formData;
+    
+    if (!name.trim()) {
+      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Name is required' });
+      return false;
+    }
+    
+    if (!email.trim()) {
+      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Email is required' });
+      return false;
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Please enter a valid email address' });
+      return false;
+    }
+    
+    if (!subject.trim()) {
+      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Subject is required' });
+      return false;
+    }
+    
+    if (!message.trim()) {
+      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Message is required' });
+      return false;
+    }
+    
+    if (message.trim().length < 10) {
+      setFormStatus({ isSubmitting: false, isSuccess: false, isError: true, errorMessage: 'Message must be at least 10 characters long' });
+      return false;
+    }
+    
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
+    
+    if (!validateForm()) {
+      return;
+    }
+
+    setFormStatus({ isSubmitting: true, isSuccess: false, isError: false, errorMessage: '' });
+
+    try {
+      // Check if Supabase environment variables are available
+      if (!import.meta.env.VITE_SUPABASE_URL || !import.meta.env.VITE_SUPABASE_ANON_KEY) {
+        throw new Error('Supabase configuration is missing. Please check your environment variables.');
+      }
+
+      const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-contact-email`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        setFormStatus({ isSubmitting: false, isSuccess: true, isError: false, errorMessage: '' });
+        // Reset form
+        setFormData({ name: '', email: '', subject: '', message: '' });
+        
+        // Auto-hide success message after 5 seconds
+        setTimeout(() => {
+          setFormStatus(prev => ({ ...prev, isSuccess: false }));
+        }, 5000);
+      } else {
+        // Handle specific error cases
+        if (result.details && result.details.includes('RESEND_API_KEY')) {
+          throw new Error('Email service is not configured. Please contact the site administrator.');
+        } else if (result.details && result.details.includes('YOUR_EMAIL')) {
+          throw new Error('Email service is not configured. Please contact the site administrator.');
+        } else {
+          throw new Error(result.error || result.details || 'Failed to send message');
+        }
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+      
+      let errorMessage = 'Failed to send message. Please try again.';
+      
+      // Provide user-friendly error messages
+      if (error.message.includes('Email service is not configured')) {
+        errorMessage = 'The contact form is temporarily unavailable. Please try contacting me directly via email or social media.';
+      } else if (error.message.includes('Supabase configuration')) {
+        errorMessage = 'The contact form is not properly configured. Please try contacting me directly.';
+      } else if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+        errorMessage = 'Network error. Please check your internet connection and try again.';
+      }
+      
+      setFormStatus({ 
+        isSubmitting: false, 
+        isSuccess: false, 
+        isError: true, 
+        errorMessage: errorMessage
+      });
+    }
   };
 
   const toggleFAQ = (index) => {
@@ -148,11 +259,41 @@ const Contact = () => {
                   <ShinyText size="lg">SEND A MESSAGE</ShinyText>
                 </div>
                 
+                {/* Status Messages */}
+                <AnimatePresence>
+                  {formStatus.isSuccess && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="mb-6 p-4 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg flex items-center gap-3"
+                    >
+                      <CheckCircle size={20} className="text-green-600 dark:text-green-400 flex-shrink-0" />
+                      <div>
+                        <p className="text-green-800 dark:text-green-200 font-medium text-sm">Message sent successfully!</p>
+                        <p className="text-green-700 dark:text-green-300 text-xs mt-1">I'll get back to you within 24-48 hours.</p>
+                      </div>
+                    </motion.div>
+                  )}
+                  
+                  {formStatus.isError && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg flex items-center gap-3"
+                    >
+                      <AlertCircle size={20} className="text-red-600 dark:text-red-400 flex-shrink-0" />
+                      <p className="text-red-800 dark:text-red-200 text-sm">{formStatus.errorMessage}</p>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+                
                 <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
                   <div className="grid md:grid-cols-2 gap-4 sm:gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2">
-                        Name
+                        Name *
                       </label>
                       <input
                         type="text"
@@ -161,13 +302,15 @@ const Contact = () => {
                         value={formData.name}
                         onChange={handleChange}
                         className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-gray-600/30 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 focus:bg-white/60 dark:focus:bg-gray-800/60 transition-all duration-300 text-sm sm:text-base shadow-lg shadow-black/5 dark:shadow-black/10 font-light placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                        placeholder="Your full name"
+                        disabled={formStatus.isSubmitting}
                         required
                       />
                     </div>
                     
                     <div>
                       <label htmlFor="email" className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2">
-                        Email
+                        Email *
                       </label>
                       <input
                         type="email"
@@ -176,6 +319,8 @@ const Contact = () => {
                         value={formData.email}
                         onChange={handleChange}
                         className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-gray-600/30 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 focus:bg-white/60 dark:focus:bg-gray-800/60 transition-all duration-300 text-sm sm:text-base shadow-lg shadow-black/5 dark:shadow-black/10 font-light placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                        placeholder="your.email@example.com"
+                        disabled={formStatus.isSubmitting}
                         required
                       />
                     </div>
@@ -183,7 +328,7 @@ const Contact = () => {
 
                   <div>
                     <label htmlFor="subject" className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2">
-                      Subject
+                      Subject *
                     </label>
                     <input
                       type="text"
@@ -192,13 +337,15 @@ const Contact = () => {
                       value={formData.subject}
                       onChange={handleChange}
                       className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-gray-600/30 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 focus:bg-white/60 dark:focus:bg-gray-800/60 transition-all duration-300 text-sm sm:text-base shadow-lg shadow-black/5 dark:shadow-black/10 font-light placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                      placeholder="What's this about?"
+                      disabled={formStatus.isSubmitting}
                       required
                     />
                   </div>
 
                   <div>
                     <label htmlFor="message" className="block text-sm font-light text-gray-800 dark:text-gray-200 mb-2">
-                      Message
+                      Message *
                     </label>
                     <textarea
                       id="message"
@@ -207,19 +354,31 @@ const Contact = () => {
                       value={formData.message}
                       onChange={handleChange}
                       className="w-full px-3 sm:px-4 py-2 sm:py-3 bg-white/40 dark:bg-gray-800/40 backdrop-blur-md border border-white/30 dark:border-gray-600/30 rounded-lg text-gray-900 dark:text-gray-100 focus:ring-2 focus:ring-green-500/50 focus:border-green-500/50 focus:bg-white/60 dark:focus:bg-gray-800/60 transition-all duration-300 resize-none text-sm sm:text-base shadow-lg shadow-black/5 dark:shadow-black/10 font-light placeholder:text-gray-500 dark:placeholder:text-gray-400"
+                      placeholder="Tell me about your project or just say hello..."
+                      disabled={formStatus.isSubmitting}
                       required
                     ></textarea>
                   </div>
 
                   <button
                     type="submit"
-                    className="group relative w-full border border-gray-800/60 dark:border-gray-200/60 text-gray-800 dark:text-gray-200 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-light overflow-hidden transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base shadow-xl shadow-black/20 dark:shadow-black/30 hover:shadow-2xl hover:shadow-black/30 dark:hover:shadow-black/50 bg-white/30 dark:bg-gray-800/30 backdrop-blur-lg hover:backdrop-blur-xl"
+                    disabled={formStatus.isSubmitting}
+                    className="group relative w-full border border-gray-800/60 dark:border-gray-200/60 text-gray-800 dark:text-gray-200 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-light overflow-hidden transition-all duration-300 hover:scale-105 flex items-center justify-center gap-2 text-sm sm:text-base shadow-xl shadow-black/20 dark:shadow-black/30 hover:shadow-2xl hover:shadow-black/30 dark:hover:shadow-black/50 bg-white/30 dark:bg-gray-800/30 backdrop-blur-lg hover:backdrop-blur-xl disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   >
-                    <span className="relative z-10 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black">
-                      Send Message
-                    </span>
-                    <Send size={18} className="sm:w-5 sm:h-5 relative z-10 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black" />
-                    <div className="absolute inset-0 bg-gray-800 dark:bg-gray-200 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                    {formStatus.isSubmitting ? (
+                      <>
+                        <Loader2 size={18} className="sm:w-5 sm:h-5 animate-spin" />
+                        <span>Sending...</span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="relative z-10 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black">
+                          Send Message
+                        </span>
+                        <Send size={18} className="sm:w-5 sm:h-5 relative z-10 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black" />
+                        <div className="absolute inset-0 bg-gray-800 dark:bg-gray-200 transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
+                      </>
+                    )}
                   </button>
                 </form>
               </div>
