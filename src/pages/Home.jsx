@@ -1,13 +1,14 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import ExpertiseAccordion from "../components/ExpertiseAccordion";
 import IntroAnimation from "../components/IntroAnimation";
 import ScrollReveal from "../components/ScrollReveal";
 import ScrollTextReveal from "../components/ScrollTextReveal";
 import ShinyText from "../components/ShinyText";
 import WavingHandSVG from "../components/WavingHandSVG";
+import ThemedButton from "../components/buttons/ThemedButton";
 
 const Home = () => {
   const [showMainContent, setShowMainContent] = useState(false);
@@ -221,7 +222,7 @@ const Home = () => {
                 <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 lg:gap-8">
                   {/* Button - First on mobile, right on desktop */}
                   <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
-                    <Link
+                    {/* <Link
                       to="/about"
                       className="group relative inline-block border border-black dark:border-white text-black dark:text-white px-6 sm:px-8 lg:px-10 py-3 sm:py-4 rounded-full font-medium overflow-hidden transition-all duration-300 text-sm sm:text-base lg:text-lg font-satoshi hover:shadow-lg hover:shadow-black/20 dark:hover:shadow-black/40"
                       onClick={() =>
@@ -232,7 +233,14 @@ const Home = () => {
                         Know me better
                       </span>
                       <div className="absolute inset-0 bg-black dark:bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                    </Link>
+                    </Link> */}
+                    <ThemedButton
+                      to="/about"
+                      size="xl"
+                      className="font-satoshi"
+                    >
+                      Know me better
+                    </ThemedButton>
                   </div>
 
                   {/* Social Links - Second on mobile, left on desktop */}
@@ -551,28 +559,7 @@ const Home = () => {
                       </span>
                       <div className="absolute inset-0 bg-black dark:bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
                     </Link> */}
-
-                    <Link
-                      to="/contact"
-                      className="group relative inline-block border border-black dark:border-white text-black dark:text-white bg-transparent px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium overflow-hidden transition-all duration-300 text-sm sm:text-base hover:shadow-lg hover:shadow-black/20 dark:hover:shadow-black/40"
-                      onClick={() =>
-                        sessionStorage.setItem("internalNavigation", "true")
-                      }
-                    >
-                      {/* Text for normal state (black in light, white in dark) */}
-                      <span className="relative z-10 transition-opacity duration-300 group-hover:opacity-0 dark:group-hover:opacity-0">
-                        Contact Me
-                      </span>
-                      {/* Text for hover state (white in light, black in dark) */}
-                      <span
-                        className="absolute inset-0 flex items-center justify-center font-medium transition-opacity duration-300 opacity-0 group-hover:opacity-100 dark:group-hover:opacity-100 z-10
-    group-hover:text-white dark:group-hover:text-black"
-                      >
-                        Contact Me
-                      </span>
-                      {/* Animated background: black in light, white in dark */}
-                      <div className="absolute inset-0 bg-black dark:bg-white pointer-events-none transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out z-0"></div>
-                    </Link>
+                    <ThemedButton to="/contact">Contact Me</ThemedButton>
                   </ScrollReveal>
                 </div>
               </div>

@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight, Download } from "lucide-react";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import BlurText from "../components/blurFadeText";
+import BlurText from "../components/BlurFadeText";
+import ThemedButton from "../components/buttons/ThemedButton";
 import DesignProcessCarousel from "../components/DesignProcessCarousel";
 import ScrollReveal from "../components/ScrollReveal";
 import ShinyText from "../components/ShinyText";
@@ -31,8 +31,6 @@ import pythonLogo from "../assets/logos/Python_logo.png";
 import reactLogo from "../assets/logos/react_logo.png";
 import sqlLogo from "../assets/logos/sql_logo.png";
 import tailwindLogo from "../assets/logos/tailwind_logo.png";
-
-// resume import
 
 // import resumeFile from "../assets/resume/Sriram-resume-2025.pdf";
 
@@ -204,7 +202,7 @@ const About = () => {
                   digital designer
                 </h1>
               </ScrollReveal> */}
-              <ScrollReveal direction="right" delay={0.2}>
+              {/* <ScrollReveal direction="right" delay={0.2}>
                 <h1 className="font-clash text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-tight mb-6 sm:mb-8">
                   <span className="text-black dark:text-white">A </span>
                   <span className="text-green-500 inline-block">
@@ -220,6 +218,22 @@ const About = () => {
                     digital designer
                   </span>
                 </h1>
+              </ScrollReveal> */}
+              <ScrollReveal direction="right" delay={0.2}>
+                <h1 className="font-clash text-3xl sm:text-4xl md:text-5xl lg:text-4xl xl:text-5xl 2xl:text-6xl font-bold leading-tight mb-6 sm:mb-8">
+                  <span className="text-black dark:text-white">A </span>
+                  <span className="text-green-500 inline-block ">
+                    <BlurText
+                      text="creative developer"
+                      animateBy="letter"
+                      direction="bottom"
+                      delay={100}
+                    />
+                  </span>{" "}
+                  <span className="text-black dark:text-white">
+                    & digital designer
+                  </span>
+                </h1>
               </ScrollReveal>
 
               <ScrollReveal direction="right" delay={0.3}>
@@ -231,7 +245,7 @@ const About = () => {
               </ScrollReveal>
 
               <ScrollReveal direction="right" delay={0.4}>
-                <button
+                {/* <button
                   onClick={handleDownloadResume}
                   className="group relative inline-flex items-center gap-3 border border-black dark:border-white text-black dark:text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium overflow-hidden transition-all duration-300 hover:scale-105 text-sm sm:text-base shadow-lg shadow-black/20 dark:shadow-black/30 hover:shadow-xl hover:shadow-black/30 dark:hover:shadow-black/50"
                 >
@@ -243,7 +257,16 @@ const About = () => {
                     className="sm:w-[18px] sm:h-[18px] relative z-10 transition-colors duration-300 group-hover:text-white dark:group-hover:text-black"
                   />
                   <div className="absolute inset-0 bg-black dark:bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                </button>
+                </button> */}
+                <ThemedButton
+                  onClick={handleDownloadResume}
+                  icon={
+                    <Download size={16} className="sm:w-[18px] sm:h-[18px]" />
+                  }
+                  className="shadow-lg shadow-black/20 dark:shadow-black/30 hover:shadow-xl hover:shadow-black/30 dark:hover:shadow-black/50"
+                >
+                  My Resume
+                </ThemedButton>
               </ScrollReveal>
             </div>
           </div>
@@ -459,7 +482,7 @@ const About = () => {
               </ScrollReveal>
 
               <ScrollReveal direction="up" delay={0.3}>
-                <Link
+                {/* <Link
                   to="/contact"
                   className="group relative inline-block border border-black dark:border-white text-black dark:text-white px-6 sm:px-8 py-3 sm:py-4 rounded-full font-medium overflow-hidden transition-all duration-300 text-sm sm:text-base hover:shadow-lg hover:shadow-black/20 dark:hover:shadow-black/40"
                   onClick={() =>
@@ -470,7 +493,8 @@ const About = () => {
                     Contact Me
                   </span>
                   <div className="absolute inset-0 bg-black dark:bg-white transform translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out"></div>
-                </Link>
+                </Link> */}
+                <ThemedButton to="/contact">Contact Me</ThemedButton>
               </ScrollReveal>
             </div>
           </div>
