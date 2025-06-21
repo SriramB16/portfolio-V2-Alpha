@@ -7,6 +7,6 @@ export default defineConfig({
   optimizeDeps: {
     exclude: ["lucide-react"],
   },
-  // base: "/portfolio-V2-Alpha/",
-  base: "/",
+  base: "/portfolio-V2-Alpha/",
+  // base: "/",
 });
