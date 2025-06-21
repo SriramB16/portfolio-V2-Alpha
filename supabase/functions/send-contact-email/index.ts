@@ -1,4 +1,4 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -79,7 +79,7 @@ serve(async (req) => {
 
     // Email to you (notification)
     const notificationEmail = {
-      from: 'Portfolio Contact <noreply@yourdomain.com>',
+      from: 'Sriram Portfolio <contact@srirambaskaran.live>',
       to: [YOUR_EMAIL],
       subject: `New Contact Form Submission: ${subject}`,
       html: `
@@ -115,7 +115,7 @@ serve(async (req) => {
 
     // Auto-reply email to the user
     const autoReplyEmail = {
-      from: 'Sriram Baskaran <noreply@yourdomain.com>',
+      from: 'Sriram Baskaran <contact@srirambaskaran.live>',
       to: [email],
       subject: 'Thank you for reaching out!',
       html: `
@@ -162,7 +162,7 @@ serve(async (req) => {
     console.log('Attempting to send emails...')
 
     // Send notification email to you
-    const notificationResponse = await fetch('https://api.resend.com/emails', {
+    const notificationResponse = await fetch('https://api.resend.com/emails',{
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
